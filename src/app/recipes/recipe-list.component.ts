@@ -7,13 +7,12 @@ import { Recipe, RecipeService }  from './recipe.service';
 
 @Component({
   template: `
-    <h2>Recipes</h2>
     <ul class="row">
-      <li class="col-lg-2" *ngFor="let recipe of recipes$ | async"
+      <li class="" *ngFor="let recipe of recipes$ | async"
         [class.selected]="recipe.id === selectedId">
         <div class="card">
           <div class="card-img">
-              <img src="https://placehold.it/350x120">
+              <img src="https://source.unsplash.com/356x356/?food,recipe">
           </div>
           <div class="card-block">
               <h4 [routerLink]="['/recipe', recipe.id]" class="card-title">{{recipe.name}}</h4>
@@ -22,14 +21,11 @@ import { Recipe, RecipeService }  from './recipe.service';
               Nihil nemo, necessitatibus earum.
               </p>
           </div>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">Lorem ipsum dolor.</li>
-              <li class="list-group-item">Lorem ipsum dolor sit.</li>
-              <li class="list-group-item">Lorem ipsum.</li>
-          </ul>
           <div class="card-footer">
-              <a href="..." class="btn btn-sm btn-link">Action 1</a>
-              <a href="..." class="btn btn-sm btn-link">Action 2</a>
+            <button type="button" class="btn btn-icon btn-primary">
+              <clr-icon shape="add-text"></clr-icon>
+              Add
+            </button>
           </div>
         </div>
       </li>

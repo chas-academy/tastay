@@ -7,7 +7,6 @@ import { Recipe, RecipeService }  from './recipe.service';
 
 @Component({
   template: `
-  <h2>Recipes</h2>
   <div *ngIf="recipe$ | async as recipe">
     <h3>"{{ recipe.name }}"</h3>
     <div>
