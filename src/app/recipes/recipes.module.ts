@@ -10,6 +10,8 @@ import { RecipeDetailComponent }  from './recipe-detail.component';
 import { RecipeService } from './recipe.service';
 import { RecipesRoutingModule } from './recipes-routing.module';
 
+import { RecipeFilterPipe } from '../recipes-pipe';
+
 @NgModule({
   imports: [
     ClarityModule,
@@ -19,7 +21,8 @@ import { RecipesRoutingModule } from './recipes-routing.module';
   ],
   declarations: [
     RecipeListComponent,
-    RecipeDetailComponent
+    RecipeDetailComponent,
+    RecipeFilterPipe
   ],
   providers: [ RecipeService ]
 })

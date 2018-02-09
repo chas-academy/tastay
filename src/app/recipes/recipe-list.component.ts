@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 
 import { RecipeService } from './recipe.service';
 import { SavedService } from '../saved/saved.service';
@@ -9,8 +9,15 @@ import { Saved } from '../saved/saved.model';
 
 @Component({
   template: `
+    <nav class="subnav">
+        <ul class="nav">
+            <li *ngFor="let filter of filters" class="nav-item">
+                <span class="nav-link" (click)="toggleFilter(filter.id)">{{filter.description}}</span>
+            </li>
+        </ul>
+    </nav>
     <ul class="grid" *ngIf="recipes else loading">
-      <li *ngFor="let recipe of recipes">
+      <li *ngFor="let recipe of (recipes | recipeFilter:type)">
         <div class="card">
           <div class="card-img">
               <img [src]="recipe.image">
@@ -91,8 +98,12 @@ import { Saved } from '../saved/saved.model';
   `
 })
 export class RecipeListComponent implements OnInit {
+  filters: any[];
   recipes: Recipe[];
   lists: Saved[];
+  toggle: boolean;
+
+  get type()   { return this.toggle ? 'Sugar-Conscious' : ''; }
 
   private selectedId: number;
   private listTitle: string;
@@ -101,7 +112,30 @@ export class RecipeListComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private savedService: SavedService
-  ) {}
+  ) {
+    this.filters = [
+      {
+        id: 0,
+        description: 'All'
+      },
+      {
+        id: 1,
+        description: 'Gluten'
+      },
+      {
+        id: 2,
+        description: 'Lactose'
+      },
+      {
+        id: 3,
+        description: 'Low fat'
+      },
+      {
+        id: 4,
+        description: 'Balanced'
+      },
+    ];
+  }
 
   ngOnInit() {
      this.recipeService.getRecipes().subscribe(res => this.recipes = res);
@@ -111,6 +145,10 @@ export class RecipeListComponent implements OnInit {
   toggleModal(recipeId: number) {
     this.selectedId = recipeId;
     this.showModal = !this.showModal;
+  }
+
+  toggleFilter() {
+    this.toggle = !this.toggle;
   }
 
   addRecipe(listId: number) {

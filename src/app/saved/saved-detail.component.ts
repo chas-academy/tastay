@@ -3,10 +3,37 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { SavedService } from './saved.service';
 import { Saved } from './saved.model';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   template: `
-  <h2>List goes here</h2>
+    <div *ngIf="list else empty">
+    <h2>{{list.title}}</h2>
+    <ul class="grid" *ngIf="list.recipes">
+      <li *ngFor="let recipe of list.recipes">
+        <div class="card">
+          <div class="card-img">
+              <img [src]="recipe.image">
+          </div>
+          <div class="card-block" routerLink="/recipe/{{recipe.id}}">
+              <h4 class="card-title">{{recipe.label}}</h4>
+              <p class="card-text">
+              </p>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-icon btn-primary" (click)="removeRecipe(list.id, recipe.id)">
+              <clr-icon shape="times-circle"></clr-icon>
+                Remove
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <ng-template #empty>
+    <h3>This list is empty, go add some recipes you!</h3>
+    <a class="btn btn-success" routerLink="/recipes">Explore recipes</a>
+  </ng-template>
   `
 })
 export class SavedDetailComponent implements OnInit {
@@ -23,9 +50,22 @@ export class SavedDetailComponent implements OnInit {
   }
 
   getList() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.service.getList(id).subscribe(res => console.log(res));
+    const listId = +this.route.snapshot.paramMap.get('id');
+    /**
+     * Please forgive me
+     */
+    this.service.getList(listId).subscribe((resolvableArray: any) => {
+      return resolvableArray.forEach(observable => {
+        return observable.subscribe(list => {
+          return this.list = list;
+        });
+      });
+    });
   }
 
+  removeRecipe(listId: number, recipeId: number): Observable<Saved[]> {
+    return this.service.removeRecipeFromList(listId, recipeId).subscribe(res => {
 
+    });
+  }
 }

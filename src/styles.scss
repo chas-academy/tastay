@@ -2,23 +2,13 @@ ul {
   list-style: none;
 }
 
-// .main-container .content-container .content-area {
-//   padding: 0;
-//   .row {
-//     margin: 0;
-//   }
-// }
-
-// .no-gutters {
-//   margin-right: 0;
-//   margin-left: 0;
-// }
-
-// .no-gutters > .col,
-// .no-gutters > [class*="col-"] {
-//   padding-right: 0;
-//   padding-left: 0;
-// }
+.main-container .subnav {
+  height: 60px; // because I said so
+  box-shadow: none;
+  .nav {
+    box-shadow: none; 
+  }
+}
 
 .grid {
   display: grid;

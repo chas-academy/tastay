@@ -6310,8 +6310,10 @@
   ],
   "saved": [
     {
-      "title": "Testing",
-      "recipes": [1, 2],
+      "title": "New freggin' list",
+      "recipes": [
+        2
+      ],
       "id": 1
     }
   ]
