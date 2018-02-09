@@ -1,53 +1,125 @@
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { Recipe, RecipeService }  from './recipe.service';
+import { RecipeService } from './recipe.service';
+import { SavedService } from '../saved/saved.service';
+import { Recipe } from './recipe.model';
+import { Saved } from '../saved/saved.model';
 
 @Component({
   template: `
-    <ul class="row">
-      <li class="" *ngFor="let recipe of recipes$ | async"
-        [class.selected]="recipe.id === selectedId">
+    <ul class="grid" *ngIf="recipes else loading">
+      <li *ngFor="let recipe of recipes">
         <div class="card">
           <div class="card-img">
-              <img src="https://source.unsplash.com/356x356/?food,recipe">
+              <img [src]="recipe.image">
           </div>
-          <div class="card-block">
-              <h4 [routerLink]="['/recipe', recipe.id]" class="card-title">{{recipe.name}}</h4>
+          <div class="card-block" routerLink="/recipe/{{recipe.id}}">
+              <h4 class="card-title">{{recipe.label}}</h4>
               <p class="card-text">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, aut.
-              Nihil nemo, necessitatibus earum.
               </p>
           </div>
           <div class="card-footer">
-            <button type="button" class="btn btn-icon btn-primary">
+            <button type="button" class="btn btn-icon btn-primary" (click)="toggleModal(recipe.id)">
               <clr-icon shape="add-text"></clr-icon>
               Add
             </button>
           </div>
         </div>
       </li>
+      <ng-template #loading>Loading recipes...</ng-template>
     </ul>
+    <div [hidden]="!showModal">
+      <div class="modal">
+        <div class="modal-dialog" role="dialog" aria-hidden="true">
+            <div class="modal-content" *ngIf='lists?.length > 0 else new'>
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" type="button" (click)="toggleModal()">
+                        <clr-icon aria-hidden="true" shape="close"></clr-icon>
+                    </button>
+                    <h3 class="modal-title">Add recipe to list</h3>
+                </div>
+                <div class="modal-body">
+                  <div class="form-block">
+                    <div class="form-group">
+                      <label for="selects_1">Select list:</label>
+                      <div class="select">
+                        <select id="selects_1" #selectedList>
+                          <option *ngFor="let list of lists" [value]="list.id">{{ list.title }}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" type="button" (click)="toggleModal()">Cancel</button>
+                    <button class="btn btn-primary" type="button" (click)="addRecipe(selectedList.value)">Ok</button>
+                </div>
+            </div>
+            <ng-template #new>
+              <div class="modal-content" >
+                  <div class="modal-header">
+                      <button aria-label="Close" class="close" type="button" (click)="toggleModal()">
+                          <clr-icon aria-hidden="true" shape="close"></clr-icon>
+                      </button>
+                      <h3 class="modal-title">Create new list</h3>
+                      <p>Whoops, you have no lists yet! :(<br/>
+                      Create a new one and then add this recipe to it.</p>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-block">
+                      <div class="form-group">
+                        <label for="list_name">Name your list:</label>
+                        <div class="form-group">
+                          <label class="required"></label>
+                          <input type="text" name="list_name" required id="requiredInput" placeholder="List name goes here" #listTitle>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button class="btn btn-outline" type="button" (click)="toggleModal()">Cancel</button>
+                      <button class="btn btn-primary" type="button" (click)="addList(listTitle.value)">Create list</button>
+                  </div>
+              </div>
+            </ng-template>
+        </div>
+      </div>
+      <div class="modal-backdrop" aria-hidden="true"></div>
+    </div>
   `
 })
 export class RecipeListComponent implements OnInit {
-  recipes$: Observable<Recipe[]>;
+  recipes: Recipe[];
+  lists: Saved[];
 
   private selectedId: number;
+  private listTitle: string;
+  private showModal: boolean;
 
   constructor(
-    private service: RecipeService,
-    private route: ActivatedRoute
+    private recipeService: RecipeService,
+    private savedService: SavedService
   ) {}
 
   ngOnInit() {
-    this.recipes$ = this.route.paramMap
-      .switchMap((params: ParamMap) => {
-        // (+) before `params.get()` turns the string into a number
-        this.selectedId = +params.get('id');
-        return this.service.getRecipes();
-      });
+     this.recipeService.getRecipes().subscribe(res => this.recipes = res);
+     this.savedService.getLists().subscribe(res => this.lists = res);
+  }
+
+  toggleModal(recipeId: number) {
+    this.selectedId = recipeId;
+    this.showModal = !this.showModal;
+  }
+
+  addRecipe(listId: number) {
+    this.savedService.addRecipeToList(listId, this.selectedId);
+    this.showModal = !this.showModal;
+  }
+
+  addList(listTitle: string) {
+    this.savedService.createList(listTitle);
+    this.showModal = !this.showModal;
   }
 }

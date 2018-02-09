@@ -21,8 +21,8 @@ import { Component } from '@angular/core';
           </a>
       </div>
     </header>
-    <div class="content-container">
-      <div class="content-area container-fluid">
+    <div class="">
+      <div class="">
         <router-outlet></router-outlet>
       </div>
     </div>
