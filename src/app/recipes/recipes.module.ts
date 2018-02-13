@@ -1,16 +1,17 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
-import { FormsModule }    from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { ClarityModule } from "@clr/angular";
+import { ClarityModule } from '@clr/angular';
 
-import { RecipeListComponent }    from './recipe-list.component';
-import { RecipeDetailComponent }  from './recipe-detail.component';
+import { RecipeListComponent } from './recipe-list.component';
+import { RecipeDetailComponent } from './recipe-detail.component';
 
 import { RecipeService } from './recipe.service';
 import { RecipesRoutingModule } from './recipes-routing.module';
 
-import { RecipeFilterPipe } from '../recipes-pipe';
+import { RecipeFilterPipe } from './recipes-pipe';
+import { AuthGuard } from '../guard/auth-guard.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,6 @@ import { RecipeFilterPipe } from '../recipes-pipe';
     RecipeDetailComponent,
     RecipeFilterPipe
   ],
-  providers: [ RecipeService ]
+  providers: [RecipeService, AuthGuard]
 })
-export class RecipesModule {}
+export class RecipesModule { }

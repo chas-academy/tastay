@@ -1,12 +1,13 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SavedListComponent } from './saved-list.component';
 import { SavedDetailComponent } from './saved-detail.component';
+import { AuthGuard } from '../guard/auth-guard.service';
 
 const savedRoutes: Routes = [
-  { path: 'saved', component: SavedListComponent },
-  { path: 'saved/:id/recipes',  component: SavedDetailComponent},
+  { path: 'saved', component: SavedListComponent, canActivate: [AuthGuard] },
+  { path: 'saved/:id/recipes',  component: SavedDetailComponent, canActivateChild: [AuthGuard] },
 ];
 
 @NgModule({

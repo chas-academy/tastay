@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ClarityModule } from "@clr/angular";
+import { ClarityModule } from '@clr/angular';
 
 import { SavedListComponent } from './saved-list.component';
 import { SavedDetailComponent } from './saved-detail.component';
 
 import { SavedRoutingModule } from './saved-routing.module';
-import {SavedService} from './saved.service';
+import { AuthGuard } from '../guard/auth-guard.service';
+import { SavedService } from './saved.service';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {SavedService} from './saved.service';
     SavedDetailComponent
   ],
   providers: [
-    SavedService
+    SavedService,
+    AuthGuard
   ]
 })
 export class SavedModule { }

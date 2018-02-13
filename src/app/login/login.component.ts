@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../shared/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private auth: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -21,10 +21,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authenticationService.login(this.model.username, this.model.password)
+    this.auth.login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          // redirect to /user which makes http.get to /api/auth/user
+          this.router.navigate(['/recipes']);
         },
         error => {
           console.error(error);
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.auth.logout();
   }
 
 }

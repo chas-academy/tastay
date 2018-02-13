@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { map, flatMap } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
@@ -15,19 +15,14 @@ export class SavedService {
   ) { }
 
   addRecipeToList(listId: number, recipeId: number) {
-    this.restangular.one('saved', listId).get().subscribe(res => {
+    return this.restangular.one('saved', listId).get().subscribe(res => {
       res.recipes.push(recipeId);
       res.save();
     });
   }
 
   removeRecipeFromList(listId: number, recipeId: number) {
-    this.restangular.one('saved', listId).get().subscribe(res => {
-      res.recipes = res.recipes.filter(id => id !== recipeId);
-      res.save();
-    });
-
-    this.getList(listId); // ruh-oh (Said scooby)
+    return this.restangular.one('saved', listId).get();
   }
 
   getLists() {
@@ -35,12 +30,6 @@ export class SavedService {
   }
 
   getList(listId: number) {
-    // 1 Fetch list - done
-    // 2 When list is here, get that lists recipes ids: from the recipes[] array - done
-    // 3 map over the ids - done
-    // 4 make subsequent requests for each of the ids - MEEEEP
-    // replace the ids inside recipes[] array on the outer list object
-    // return... have a beer, be happy
     const recipes: any[] = [];
 
     return this.http.get(`http://localhost:3000/saved/${listId}`)

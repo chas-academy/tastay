@@ -1,12 +1,14 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RecipeListComponent }    from './recipe-list.component';
-import { RecipeDetailComponent }  from './recipe-detail.component';
+import { RecipeListComponent } from './recipe-list.component';
+import { RecipeDetailComponent } from './recipe-detail.component';
+
+import { AuthGuard } from '../guard/auth-guard.service';
 
 const recipesRoutes: Routes = [
-  { path: 'recipes', component: RecipeListComponent },
-  { path: 'recipe/:id',  component: RecipeDetailComponent },
+  { path: 'recipes', component: RecipeListComponent, canActivate: [AuthGuard] },
+  { path: 'recipe/:id', component: RecipeDetailComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

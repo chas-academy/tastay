@@ -20,13 +20,14 @@ import { NotFoundComponent } from './notfound/notfound.component';
 import { ClarityModule } from '@clr/angular';
 
 import { LoginComponent } from './login/login.component';
-import { AuthenticationService } from './authentication.service';
 
 export function RestangularConfigFactory(RestangularProvider) {
   RestangularProvider.setBaseUrl('http://localhost:3000');
 }
 
 import { JwtModule } from '@auth0/angular-jwt';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   imports: [
@@ -51,9 +52,11 @@ import { JwtModule } from '@auth0/angular-jwt';
   declarations: [
     AppComponent,
     NotFoundComponent,
-    LoginComponent
+    LoginComponent,
+    UnauthorizedComponent,
+    RegisterComponent
   ],
-  providers: [HttpClientModule, AuthenticationService],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

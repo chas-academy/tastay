@@ -1,30 +1,32 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { NotFoundComponent }    from './notfound/notfound.component';
+import { NotFoundComponent } from './notfound/notfound.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { SavedListComponent } from './saved/saved-list.component';
 import { LoginComponent } from './login/login.component';
 
-const appRoutes: Routes = [
-  { path: '',   redirectTo: '/recipes', pathMatch: 'full' },
-  { path: 'saved', component: SavedListComponent },
-  { path: 'login', component: LoginComponent },
-  { path: '**', component: NotFoundComponent },
+import { AuthenticationService } from './shared/authentication.service';
+import { AuthGuard } from './guard/auth-guard.service';
+import { RegisterComponent } from './register/register.component';
 
+const appRoutes: Routes = [
+  { path: '', redirectTo: '/recipes', pathMatch: 'full'},
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(
-      appRoutes,
-      {
-        // enableTracing: true
-      }
+      appRoutes
     )
   ],
   exports: [
     RouterModule
   ],
-  providers: []
+  providers: [AuthGuard, AuthenticationService]
 })
 export class AppRoutingModule { }

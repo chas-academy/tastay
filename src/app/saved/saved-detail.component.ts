@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
   template: `
     <div *ngIf="list else empty">
     <h2>{{list.title}}</h2>
-    <ul class="grid" *ngIf="list.recipes">
+    <ul class="grid" *ngIf="list.recipes?.length > 0 else empty">
       <li *ngFor="let recipe of list.recipes">
         <div class="card">
           <div class="card-img">
@@ -63,9 +63,11 @@ export class SavedDetailComponent implements OnInit {
     });
   }
 
-  // removeRecipe(listId: number, recipeId: number): Observable<Saved[]> {
-  //   // return this.service.removeRecipeFromList(listId, recipeId).subscribe(res => {
-
-  //   // });
-  // }
+  removeRecipe(listId: number, recipeId: number) {
+    return this.service.removeRecipeFromList(listId, recipeId).subscribe(res => {
+      res.recipes = res.recipes.filter(id => id !== recipeId);
+      this.list = res.plain();
+      res.save();
+    });
+  }
 }
