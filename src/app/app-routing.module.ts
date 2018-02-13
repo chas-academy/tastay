@@ -3,11 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { NotFoundComponent }    from './notfound/notfound.component';
 import { SavedListComponent } from './saved/saved-list.component';
+import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
   { path: '',   redirectTo: '/recipes', pathMatch: 'full' },
   { path: 'saved', component: SavedListComponent },
-  { path: '**', component: NotFoundComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '**', component: NotFoundComponent },
+
 ];
 
 @NgModule({

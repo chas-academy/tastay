@@ -63,9 +63,9 @@ export class SavedDetailComponent implements OnInit {
     });
   }
 
-  removeRecipe(listId: number, recipeId: number): Observable<Saved[]> {
-    return this.service.removeRecipeFromList(listId, recipeId).subscribe(res => {
+  // removeRecipe(listId: number, recipeId: number): Observable<Saved[]> {
+  //   // return this.service.removeRecipeFromList(listId, recipeId).subscribe(res => {
 
-    });
-  }
+  //   // });
+  // }
 }
