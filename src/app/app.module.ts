@@ -21,13 +21,24 @@ import { ClarityModule } from '@clr/angular';
 
 import { LoginComponent } from './login/login.component';
 
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { RegisterComponent } from './register/register.component';
+
 export function RestangularConfigFactory(RestangularProvider) {
   RestangularProvider.setBaseUrl('http://localhost:3000');
 }
 
-import { JwtModule } from '@auth0/angular-jwt';
-import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { RegisterComponent } from './register/register.component';
+export function jwtOptionsFactory() {
+  return {
+      tokenGetter: () => {
+        return JSON.parse(localStorage.getItem('currentUser')).data.access_token;
+      },
+      whitelistedDomains: ['http://api.tastay.test'],
+      skipWhenExpired: true
+    };
+}
+
 
 @NgModule({
   imports: [
@@ -41,12 +52,9 @@ import { RegisterComponent } from './register/register.component';
     BrowserAnimationsModule,
     RestangularModule.forRoot(RestangularConfigFactory),
     JwtModule.forRoot({
-      config: {
-        tokenGetter: () => {
-          return localStorage.getItem('access_token');
-        },
-        whitelistedDomains: ['http://api.tastay.test']
-      }
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtOptionsFactory
     })
   ],
   declarations: [
